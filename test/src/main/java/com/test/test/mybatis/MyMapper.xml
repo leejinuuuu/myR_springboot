@@ -7,8 +7,9 @@
     select * from data;
     </select>
    
-    <insert id="insertData" parameterType="hashMap">
+    <insert id="insertData" parameterType="String">
     <!-- 쿼리문 -->    
+        insert data(data0, data1, data2) values (#{data0}, #{data1}, #{data2});
     </insert>   
     
     <insert id="updateData" parameterType="hashMap">

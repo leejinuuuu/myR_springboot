@@ -15,7 +15,7 @@ public interface MyMapper {
 
     int updateData(HashMap<Object, Object> vo) throws Exception;
 
-    int insertData(HashMap<Object, Object> vo) throws Exception;
+    int insertData(String data) throws Exception;
 
     List<data> selectData();
 }

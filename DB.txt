@@ -11,5 +11,8 @@ create table data (
 );
 
 insert data(data0, data1, data2) values("1","1","1");
+insert data(data0, data1, data2) values("2","2","2");
+insert data(data0, data1, data2) values("3","3","3");
+insert data(data0, data1, data2) values("4","4","4");
 
 select * from data;

@@ -55,4 +55,18 @@ public class TestController {
 
         return mMapper.selectData();
     }
+
+    @RequestMapping(value = "/data", method = RequestMethod.POST)
+    public int insertData(
+            @RequestParam(value = "data") String data) {
+
+        int result = 0;
+        try {
+            result = mMapper.insertData(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

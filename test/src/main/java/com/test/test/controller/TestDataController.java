@@ -2,17 +2,14 @@ package com.test.test.controller;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.filechooser.FileSystemView;
 
 import com.test.test.data;
 import com.test.test.mybatis.MyMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +47,7 @@ public class TestDataController {
 
     @RequestMapping(value = "/data", method = RequestMethod.POST)
     public int insertData(
-            @RequestParam(value = "data") String data) {
+            @RequestBody data data) {
 
         int result = 0;
         try {

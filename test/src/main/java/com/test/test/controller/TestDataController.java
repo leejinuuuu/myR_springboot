@@ -2,41 +2,25 @@ package com.test.test.controller;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.filechooser.FileSystemView;
 
 import com.test.test.data;
 import com.test.test.mybatis.MyMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Service
-@Controller
-public class TestController {
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model) {
-        System.out.println("index");
-
-        model.addAttribute("title", "index with model");
-
-        return "content/index";
-    }
-
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home(HttpServletRequest request) {
-        System.out.println("home");
-
-        return "content/home";
-    }
+@RestController
+public class TestDataController {
 
     @RequestMapping(value = "/params", method = RequestMethod.GET)
     public data args(

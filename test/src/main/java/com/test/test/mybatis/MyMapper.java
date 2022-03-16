@@ -1,12 +1,17 @@
 package com.test.test.mybatis;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.test.test.data;
-import com.test.test.tables.Cocktail;
-import com.test.test.tables.Ingredient;
-import com.test.test.tables.User;
+import com.test.test.tables.CocktailDTO;
+import com.test.test.tables.CommentDTO;
+import com.test.test.tables.DownloadDTO;
+import com.test.test.tables.IngredientDTO;
+import com.test.test.tables.SettingDTO;
+import com.test.test.tables.UserDTO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,103 +20,100 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface MyMapper {
-    int deleteData(HashMap<Object, Object> vo) throws Exception;
+        int deleteData(HashMap<Object, Object> vo) throws Exception;
 
-    int updateData(HashMap<Object, Object> vo) throws Exception;
+        int updateData(HashMap<Object, Object> vo) throws Exception;
 
-    int insertData(data data) throws Exception;
+        int insertData(data data) throws Exception;
 
-    List<data> selectData();
+        List<data> selectData();
 
-    // 재료
-    List<Ingredient> listIngredient(@Param("start") String start, @Param("end") String end);
+        // 재료
 
-    String insertIngredient(@Param("ingredient_name") String ingredient_name,
-            @Param("ingredient_image") String ingredient_image);
+        // start, end
+        ArrayList<IngredientDTO> listIngredient(Map<String, String> map);
 
-    Ingredient detailIngredient(@Param("ingredient_uuid") String ingredient_uuid);
+        // ingredient_name, ingredient_image
+        void insertIngredient(Map<String, String> map);
 
-    String deleteIngredient(@Param("ingredient_uuid") String ingredient_uuid);
+        // ingredient_uuid
+        IngredientDTO detailIngredient(Map<String, String> map);
 
-    // 칵테일
-    List<Cocktail> listCocktail(@Param("start") String start, @Param("end") String end);
+        // ingredient_uuid
+        void deleteIngredient(Map<String, String> map);
 
-    List<Cocktail> listStdCocktail(@Param("show_std") String show_std,
-            @Param("show_std_content") String show_std_content, @Param("start") String start, @Param("end") String end);
+        // 칵테일
 
-    String insertCocktail(
-            @Param("cocktail_name") String cocktail_name,
-            @Param("cocktail_writer") String cocktail_writer,
-            @Param("cocktail_image") String cocktail_image,
-            @Param("cocktail_explanation") String cocktail_explanation,
-            @Param("cocktail_glass") String cocktail_glass,
-            @Param("cocktail_base") String cocktail_base,
-            @Param("cocktail_source") String cocktail_source);
+        // start, end
+        ArrayList<CocktailDTO> listCocktail(Map<String, String> map);
 
-    String updateCocktail(
-            @Param("aft_cocktail_name") String aft_cocktail_name,
-            @Param("aft_cocktail_writer") String aft_cocktail_writer,
-            @Param("aft_cocktail_image") String aft_cocktail_image,
-            @Param("aft_cocktail_explanation") String aft_cocktail_explanation,
-            @Param("aft_cocktail_glass") String aft_cocktail_glass,
-            @Param("aft_cocktail_base") String aft_cocktail_base,
-            @Param("aft_cocktail_source") String aft_cocktail_source,
-            @Param("cocktail_uuid") String cocktail_uuid);
+        // show_std, show_std_content, start, end
+        ArrayList<CocktailDTO> listStdCocktail(Map<String, String> map);
 
-    Cocktail detailCocktail(@Param("cocktail_uuid") String cocktail_uuid);
+        // cocktail_name, cocktail_writer,cocktail_image, cocktail_explanation,
+        // cocktail_glass, cocktail_base, cocktail_source
+        void insertCocktail(Map<String, String> map);
 
-    String existCocktail(@Param("cocktail_uuid") String cocktail_uuid);
+        // aft_cocktail_name, aft_cocktail_writer, aft_cocktail_image,
+        // aft_cocktail_explanation, aft_cocktail_glass, aft_cocktail_base,
+        // aft_cocktail_source, cocktail_uuid
+        void updateCocktail(Map<String, String> map);
 
-    String deleteCocktail(@Param("cocktail_uuid") String cocktail_uuid);
+        // cocktail_uuid
+        CocktailDTO detailCocktail(Map<String, String> map);
 
-    // 사용자
-    String loginUser(@Param("user_id") String user_id, @Param("user_password") String user_password);
+        ArrayList<SettingDTO> detailCocktail_setting(Map<String, String> map);
 
-    String insertUser(
-            @Param("user_id") String user_id,
-            @Param("user_password") String user_password,
-            @Param("user_nickname") String user_nickname,
-            @Param("user_email") String user_email);
+        ArrayList<CommentDTO> detailCocktail_comment(Map<String, String> map);
 
-    User searchUser(@Param("user_email") String user_email);
+        // cocktail_uuid
+        void deleteCocktail(Map<String, String> map);
 
-    String modifyUser(@Param("user_nickname") String user_nickname);
+        // 사용자
 
-    User detailUser(@Param("user_id") String user_id);
+        // user_id, user_password
+        UserDTO loginUser(Map<String, String> map);
 
-    String deleteUser(@Param("user_id") String user_id);
+        // user_id, user_password, user_nickname, user_email
+        void insertUser(Map<String, String> map);
 
-    // 조합-칵테일-재료
-    String insertSetting(
-            @Param("cocktail_uuid") String cocktail_uuid,
-            @Param("cocktail_name") String cocktail_name,
-            @Param("ingredient_uuid") String ingredient_uuid,
-            @Param("ingredient_name") String ingredient_name,
-            @Param("vol") String vol,
-            @Param("tool") String tool);
+        // user_email
+        UserDTO searchUser(Map<String, String> map);
 
-    String deleteSetting(@Param("cocktail_uuid") String cocktail_uuid,
-            @Param("ingredient_uuid") String ingredient_uuid);
+        // user_nickname, user_id, user_password, user_email
+        void modifyUser(Map<String, String> map);
 
-    // 다운로드-칵테일-사용자
-    String insertDownload(
-            @Param("cocktail_uuid") String cocktail_uuid,
-            @Param("cocktail_name") String cocktail_name,
-            @Param("user_id") String user_id);
+        // user_id
+        UserDTO detailUser(Map<String, String> map);
 
-    String deleteDownload(@Param("user_id") String user_id, @Param("cocktail_uuid") String cocktail_uuid);
+        ArrayList<DownloadDTO> detailUser_download(Map<String, String> map);
 
-    // 댓글-칵테일-사용자
-    String insertComment(
-            @Param("cocktail_uuid") String cocktail_uuid,
-            @Param("cocktail_name") String cocktail_name,
-            @Param("user_id") String user_id,
-            @Param("comment") String comment,
-            @Param("time") String time);
+        ArrayList<CommentDTO> detailUser_comment(Map<String, String> map);
 
-    String deleteComment(
-            @Param("user_id") String user_id,
-            @Param("cocktail_uuid") String cocktail_uuid,
-            @Param("comment") String comment,
-            @Param("time") String time);
+        // user_id
+        void deleteUser(Map<String, String> map);
+
+        // 조합-칵테일-재료
+
+        // cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool
+        void insertSetting(Map<String, String> map);
+
+        // cocktail_uuid, ingredient_uuid
+        void deleteSetting(Map<String, String> map);
+
+        // 다운로드-칵테일-사용자
+
+        // cocktail_uuid, cocktail_name, user_id
+        void insertDownload(Map<String, String> map);
+
+        // user_id, cocktail_uuid
+        void deleteDownload(Map<String, String> map);
+
+        // 댓글-칵테일-사용자
+
+        // cocktail_uuid, cocktail_name, user_id, comment, time
+        void insertComment(Map<String, String> map);
+
+        // user_id, cocktail_uuid, comment, time
+        void deleteComment(Map<String, String> map);
 }

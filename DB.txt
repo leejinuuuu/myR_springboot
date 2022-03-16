@@ -6,7 +6,7 @@ use test_db;
 
 create table data (
 	data0 varchar(100) not null primary key,
-	data1 varchar(100) not null,
+	data1 varchar(100) null,
 	data2 varchar(50) null
 );
 
@@ -16,3 +16,174 @@ insert data(data0, data1, data2) values("3","3","3");
 insert data(data0, data1, data2) values("4","4","4");
 
 select * from data;
+
+
+create table ingredient (
+	ingredient_uuid varchar(100) not null primary key,
+	ingredient_name varchar(100) not null,
+	ingredient_image varchar(50) null
+);
+
+create table cocktail (
+	cocktail_uuid varchar(100) not null primary key,
+	cocktail_name varchar(100) not null,
+	cocktail_writer varchar(1000) null,
+	cocktail_image varchar(50) null,
+	cocktail_explanation varchar(1000) null,
+	cocktail_glass varchar(1000) null,
+	cocktail_base varchar(50) null,
+	cocktail_source varchar(1000) null
+);
+
+create table user(
+	user_id varchar(100) not null primary key,
+	user_password varchar(100) not null,
+	user_nickname varchar(100) not null,
+	user_email varchar(100) not null unique key
+);
+
+
+create table settingCocktailWithIngredient(
+	settingCocktailWithIngredient_uuid varchar(100) not null primary key,
+	cocktail_uuid varchar(100) not null,
+	cocktail_name varchar(100) not null,
+	ingredient_uuid varchar(100) not null,
+	ingredient_name varchar(50) not null,
+	vol varchar(10) not null,
+	tool varchar(10) not null,
+
+	index set_igd_index(cocktail_name),
+	foreign key(cocktail_uuid) references cocktail(cocktail_uuid) on delete cascade,
+	foreign key(ingredient_uuid) references ingredient(ingredient_uuid) on delete cascade	
+);
+
+
+create table commentCocktailWithUser(
+	commentCocktailWithUser_uuid varchar(100) not null primary key,
+	cocktail_uuid varchar(100) not null,
+	cocktail_name varchar(100) not null,
+	user_id varchar(100) not null,
+	comment varchar(1000) null,
+	time varchar(50) not null,
+
+	index set_igd_index(cocktail_name),
+	foreign key(cocktail_uuid) references cocktail(cocktail_uuid) on delete cascade,
+	foreign key(user_id) references user(user_id) on delete cascade
+);
+
+create table downloadUserWithCocktail(
+	downloadUserWithCocktail_uuid varchar(100) not null primary key,
+	cocktail_uuid varchar(100) not null,
+	cocktail_name varchar(100) not null,
+	user_id varchar(100) not null,
+
+	index set_igd_index(user_id),
+	foreign key(cocktail_uuid) references cocktail(cocktail_uuid) on delete cascade,
+	foreign key(user_id) references user(user_id) on delete cascade
+);
+
+
+/*
+재료 추가 쿼리문
+*/
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values ('1', '1_name', '1_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values ('2', '2_name', '2_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values ('3', '3_name', '3_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values ('4', '4_name', '4_image');
+
+
+/*
+칵테일 추가 쿼리문
+*/
+insert into 
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values ('a', 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null);
+insert into 
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values ('b', 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null);
+insert into 
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values ('c', 'c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
+
+/*
+조합-칵테일-재료 추가 쿼리문
+*/
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'a', 'a_name', '1', '1_name', '1', 'oz');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'a', 'a_name', '2', '2_name', '28', 'ml');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'b', 'b_name', '3', '3_name', '4.5', 'oz');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'b', 'b_name', '1', '1_name', '1', 'oz');
+
+
+
+/*
+사용자 추가 쿼리문
+*/
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user1_id', 'user1_password', 'user1_nickname', 'user1_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user2_id', 'user2_password', 'user2_nickname', 'user2_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user3_id', 'user3_password', 'user3_nickname', 'user3_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user4_id', 'user4_password', 'user4_nickname', 'user4_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user5_id', 'user5_password', 'user5_nickname', 'user5_email');
+
+/*
+다운로드-칵테일-사용자 추가 쿼리문
+*/	
+insert into 
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'a','a_name','user1_id');	
+insert into 
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'b','b_name','user1_id');
+insert into 
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'c','c_name','user2_id');	
+
+	
+/*
+댓글-칵테일-사용자 추가 쿼리문
+*/
+insert into 
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'b', 'b_name', 'user1_id', 'b_user1_comment0', 'time');
+insert into 
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'b', 'b_name', 'user2_id', 'b_user2_comment0', 'time');
+insert into 
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'a', 'a_name', 'user3_id', 'a_user3_comment0', 'time');
+
+
+
+select * from ingredient;
+select * from cocktail;
+select * from settingCocktailWithIngredient;
+
+
+select * from user;
+select * from downloadUserWithCocktail;
+select * from commentCocktailWithUser;

@@ -14,16 +14,16 @@
 
 
     <!-- 재료 목록 쿼리문-->
-    <select id="listIngredient" parameterType="hashMap" resultType="com.test.test.tables.Ingredient">
-        select * from ingredient order by ingredient_name limit #{start}, #{end};
+    <select id="listIngredient" parameterType="hashMap" resultType="com.test.test.tables.IngredientDTO">
+        select * from ingredient order by ingredient_name limit ${start}, ${end};
     </select>
     <!-- 재료 추가 쿼리문 -->
-    <insert id="insertIngredient" parameterType="String">
+    <insert id="insertIngredient" parameterType="hashMap">
         insert into ingredient(ingredient_uuid, ingredient_name, ingredient_image)
             values(uuid(), #{ingredient_name}, #{ingredient_image});
     </insert>
     <!-- 재료 상세 쿼리문-->
-    <select id="detailIngredient" parameterType="com.test.test.tables.Ingredient">
+    <select id="detailIngredient" parameterType="hashMap" resultType="com.test.test.tables.IngredientDTO">
         select * from ingredient where ingredient_uuid=#{ingredient_uuid};
     </select>
     <!-- 재료 삭제 쿼리문-->
@@ -32,102 +32,111 @@
     </delete>
 
     <!-- 칵테일 목록 쿼리문-->
-    <select id="listCocktail" parameterType="hashMap" resultType="com.test.test.tables.Cocktail">
+    <select id="listCocktail" parameterType="hashMap" resultType="com.test.test.tables.CocktailDTO">
         select * from cocktail order by cocktail_name limit #{start}, #{end};
     </select>
     <!-- 칵테일 기준 목록 쿼리문-->
-    <select id="listStdCocktail" parameterType="hashMap" resultType="com.test.test.tables.Cocktail">
+    <select id="listStdCocktail" parameterType="hashMap" resultType="com.test.test.tables.CocktailDTO">
         select * from cocktail where #{show_std}=#{show_std_content} order by cocktail_writer limit #{start}, #{end};
     </select>
     <!-- 칵테일 추가 쿼리문 -->
-    <insert id="insertCocktail" parameterType="String">
-        insert into cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_iamge, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
-            values(uuid(), #{cocktail_name}, #{cocktail_writer}, #{cocktail_iamge}, #{cocktail_explanation}, #{cocktail_glass}, #{cocktail_base}, #{cocktail_source});
+    <insert id="insertCocktail" parameterType="hashMap">
+        insert into cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
+            values(uuid(), #{cocktail_name}, #{cocktail_writer}, #{cocktail_image}, #{cocktail_explanation}, #{cocktail_glass}, #{cocktail_base}, #{cocktail_source});
     </insert>
     <!-- 칵테일 수정 쿼리문 -->
-    <update id="updateCocktail" parameterType="String">
+    <update id="updateCocktail" parameterType="hashMap">
         update cocktail
             set cocktail_name=#{aft_cocktail_name},
                 cocktail_writer=#{aft_cocktail_writer},
                 cocktail_image=#{aft_cocktail_image},
-                cocktail_explanation=#{cocktail_explanation},
-                cocktail_glass=#{cocktail_glass},
-                cocktail_base=#{cocktail_base},
-                cocktail_source=#{cocktail_source},
+                cocktail_explanation=#{aft_cocktail_explanation},
+                cocktail_glass=#{aft_cocktail_glass},
+                cocktail_base=#{aft_cocktail_base},
+                cocktail_source=#{aft_cocktail_source}
             where cocktail_uuid=#{cocktail_uuid};
     </update>
     <!-- 칵테일 상세 쿼리문 -->
-    <select id="detailCocktail" parameterType="com.test.test.tables.Cocktail">
-        select cocktail.*, settingCocktailWithIngredient.* from cocktail
-            inner join settingCocktailWithIngredient 
-                on cocktail.cocktail_uuid=settingCocktailWithIngredient_uuid
-                and cocktail.cocktail_uuid=#{cocktail_uuid};
+    <select id="detailCocktail" parameterType="hashMap" resultType="com.test.test.tables.CocktailDTO">
+        select * from cocktail
+            where cocktail_uuid=#{cocktail_uuid};
     </select>
-    <!-- 칵테일 존재여부확인 쿼리문 -->
-    <select id="existCocktail" parameterType="String">
-        select * from cocktail where cocktail_uuid=#{cocktail_uuid};
+    <!-- 칵테일 상세 쿼리문1 -->
+    <select id="detailCocktail_setting" parameterType="hashMap" resultType="com.test.test.tables.SettingDTO">
+        select * from settingCocktailWithIngredient where cocktail_uuid=#{cocktail_uuid};
+    </select>
+    <!-- 칵테일 상세 쿼리문2 -->
+    <select id="detailCocktail_comment" parameterType="hashMap" resultType="com.test.test.tables.CommentDTO">
+        select * from commentCocktailWithUser where cocktail_uuid=#{cocktail_uuid};
     </select>
     <!-- 칵테일 제거 쿼리문 -->
-    <delete id="deleteCocktail" parameterType="String">
+    <delete id="deleteCocktail" parameterType="hashMap">
         delete from cocktail where cocktail_uuid=#{cocktail_uuid};
     </delete>
 
     <!-- 사용자 로그인 쿼리문 -->
-    <select id="loginUser" parameterType="String">
-        select * from user where user_id=#{user_id} and user_password=#{user_password};
+    <select id="loginUser" parameterType="hashMap" resultType="com.test.test.tables.UserDTO">>
+        select * from user;
     </select>
     <!-- 사용자 추가 쿼리문 -->
-    <insert id="insertUser" parameterType="String">
+    <insert id="insertUser" parameterType="hashMap">
         insert into user(user_id, user_password, user_nickname, user_email)
             values(#{user_id}, #{user_password}, #{user_nickname}, #{user_email});
     </insert>
     <!-- 사용자 아이디 검색 쿼리문 -->
-    <select id="searchUser" parameterType="com.test.test.tables.User">
+    <select id="searchUser" parameterType="hashMap" resultType="com.test.test.tables.UserDTO">
         select * from user where user_email=#{user_email};
     </select>
     <!-- 사용자 수정 쿼리문 -->
-    <update id="modifyUser" parameterType="String">
+    <update id="modifyUser" parameterType="hashMap">
         update user set user_nickname=#{user_nickname} where user_id=#{user_id} and user_password=#{user_password} and user_email=#{user_email};
     </update>
     <!-- 사용자 상세 쿼리문 -->
-    <select id="detailUser" parameterType="com.test.test.tables.User">
-        select user.*, downloadUserWithCocktail.cocktail_name from user inner join downloadUserWithCocktail 
-            on user.user_id=downloadUserWithCocktail.user_id and user.user_id=#{user_id};
+    <select id="detailUser" parameterType="hashMap" resultType="com.test.test.tables.UserDTO">
+        select * from user where user_id=#{user_id};
+    </select>
+    <!-- 사용자 상세 쿼리문1 -->
+    <select id="detailUser_download" parameterType="hashMap" resultType="com.test.test.tables.DownloadDTO">
+        select downloadUserWithCocktail.* from downloadUserWithCocktail 
+            where downloadUserWithCocktail.user_id=#{user_id};
+    </select>
+    <!-- 사용자 상세 쿼리문2 -->
+    <select id="detailUser_comment" parameterType="hashMap" resultType="com.test.test.tables.CommentDTO">
+        select commentCocktailWithUser.* from commentCocktailWithUser 
+            where commentCocktailWithUser.user_id=#{user_id};
     </select>
     <!-- 사용자 삭제 쿼리문 -->
-    <delete id="deleteUser" parameterType="String">
+    <delete id="deleteUser" parameterType="hashMap">
         delete from user where user_id=#{user_id};
     </delete>
 
     <!-- 조합-칵테일-재료 추가 쿼리문 -->
-    <insert id="insertSetting" parameterType="String">
+    <insert id="insertSetting" parameterType="hashMap">
         insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
             values(uuid(), #{cocktail_uuid}, #{cocktail_name}, #{ingredient_uuid}, #{ingredient_name}, #{vol}, #{tool});
     </insert>
     <!-- 조합-칵테일-재료 삭제 쿼리문 -->
-    <delete id="deleteSetting" parameterType="String">
+    <delete id="deleteSetting" parameterType="hashMap">
         delete from settingCocktailWithIngredient where cocktail_uuid=#{cocktail_uuid} and ingredient_uuid=#{ingredient_uuid};
     </delete>
 
     <!-- 다운로드-칵테일-사용자 추가 쿼리문 -->
-    <insert id="insertDownload" parameterType="String">
+    <insert id="insertDownload" parameterType="hashMap">
         insert into downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
             values(uuid(), #{cocktail_uuid}, #{cocktail_name}, #{user_id});
     </insert>
     <!-- 다운로드-칵테일-사용자 삭제 쿼리문 -->
-    <delete id="deleteDownload" parameterType="String">
+    <delete id="deleteDownload" parameterType="hashMap">
         delete from downloadUserWithCocktail where user_id=#{user_id} and cocktail_uuid=#{cocktail_uuid};
     </delete>
 
     <!-- 댓글-칵테일-사용자 추가 쿼리문 -->
-    <insert id="insertComment" parameterType="String">
+    <insert id="insertComment" parameterType="hashMap">
         insert into commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
             values(uuid(), #{cocktail_uuid}, #{cocktail_name}, #{user_id}, #{comment}, #{time});
     </insert>
     <!-- 댓글-칵테일-사용자 삭제 쿼리문 -->
-    <delete id="deleteComment" parameterType="String">
+    <delete id="deleteComment" parameterType="hashMap">
         delete from commentCocktailWithUser where user_id=#{user_id} and cocktail_uuid=#{cocktail_uuid} and comment=#{comment} and time=#{time};
     </delete>
-
-
 </mapper>  

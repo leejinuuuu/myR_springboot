@@ -58,19 +58,29 @@ public class TestIngredientController {
     @PostMapping("add")
     public String insertIngredient(
             @RequestParam("ingredient_bitmap_file") MultipartFile ingredient_bitmap_file,
-            @RequestParam("ingredient_name") String ingredient_name,
-            @RequestParam("ingredient_image") String ingredient_image) {
+            @RequestParam("ingredient_name") String ingredient_name) {
 
         String result = "fail";
         try {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("ingredient_name", ingredient_name);
-            map.put("ingredient_image", ingredient_image);
 
             String originalName = ingredient_bitmap_file.getOriginalFilename();
             String filePath = basePath + "/" + originalName;
+            String extension = originalName.substring(originalName.length() - 4, originalName.length());
+
+            int i = 1;
+            String fileName = filePath;
+
+            while (new File(filePath).exists()) {
+                filePath = fileName.substring(0, fileName.length() - 4).concat("(" + i + ")").concat(extension);
+                i++;
+            }
+
             File dest = new File(filePath);
             ingredient_bitmap_file.transferTo(dest);
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("ingredient_name", ingredient_name);
+            map.put("ingredient_image", dest.getName());
 
             mMapper.insertIngredient(map);
             result = "success";
@@ -85,19 +95,29 @@ public class TestIngredientController {
     public String updateIngredient(
             @RequestParam("aft_ingredient_bitmap_file") MultipartFile aft_ingredient_bitmap_file,
             @RequestParam("aft_ingredient_name") String aft_ingredient_name,
-            @RequestParam("aft_ingredient_image") String aft_ingredient_image,
             @RequestParam("ingredient_uuid") String ingredient_uuid) {
 
         String result = "fail";
         try {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("ingredient_name", aft_ingredient_name);
-            map.put("ingredient_image", aft_ingredient_image);
-
             String originalName = aft_ingredient_bitmap_file.getOriginalFilename();
             String filePath = basePath + "/" + originalName;
+            String extension = originalName.substring(originalName.length() - 4, originalName.length());
+
+            int i = 1;
+            String fileName = filePath;
+
+            while (new File(filePath).exists()) {
+                filePath = fileName.substring(0, fileName.length() - 4).concat("(" + i + ")").concat(extension);
+                i++;
+            }
+
             File dest = new File(filePath);
             aft_ingredient_bitmap_file.transferTo(dest);
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("aft_ingredient_name", aft_ingredient_name);
+            map.put("aft_ingredient_image", dest.getName());
+            map.put("ingredient_uuid", ingredient_uuid);
 
             mMapper.insertIngredient(map);
             result = "success";

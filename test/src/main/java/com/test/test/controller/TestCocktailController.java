@@ -86,7 +86,6 @@ public class TestCocktailController {
             @RequestParam("cocktail_bitmap_file") MultipartFile cocktail_bitmap_file,
             @RequestParam("cocktail_name") String cocktail_name,
             @RequestParam("cocktail_writer") String cocktail_writer,
-            @RequestParam("cocktail_image") String cocktail_image,
             @RequestParam("cocktail_explanation") String cocktail_explanation,
             @RequestParam("cocktail_glass") String cocktail_glass,
             @RequestParam("cocktail_base") String cocktail_base,
@@ -94,19 +93,29 @@ public class TestCocktailController {
 
         String result = "fail";
         try {
+            String originalName = cocktail_bitmap_file.getOriginalFilename();
+            String filePath = basePath + "/" + originalName;
+            String extension = originalName.substring(originalName.length() - 4, originalName.length());
+
+            int i = 1;
+            String fileName = filePath;
+
+            while (new File(filePath).exists()) {
+                filePath = fileName.substring(0, fileName.length() - 4).concat("(" + i + ")").concat(extension);
+                i++;
+            }
+
+            File dest = new File(filePath);
+            cocktail_bitmap_file.transferTo(dest);
+
             Map<String, String> map = new HashMap<String, String>();
             map.put("cocktail_name", cocktail_name);
             map.put("cocktail_writer", cocktail_writer);
-            map.put("cocktail_image", cocktail_image);
+            map.put("cocktail_image", dest.getName());
             map.put("cocktail_explanation", cocktail_explanation);
             map.put("cocktail_glass", cocktail_glass);
             map.put("cocktail_base", cocktail_base);
             map.put("cocktail_source", cocktail_source);
-
-            String originalName = cocktail_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
-            File dest = new File(filePath);
-            cocktail_bitmap_file.transferTo(dest);
 
             mMapper.insertCocktail(map);
             result = "success";
@@ -123,7 +132,6 @@ public class TestCocktailController {
             @RequestParam("aft_cocktail_bitmap_file") MultipartFile aft_cocktail_bitmap_file,
             @RequestParam("aft_cocktail_name") String aft_cocktail_name,
             @RequestParam("aft_cocktail_writer") String aft_cocktail_writer,
-            @RequestParam("aft_cocktail_image") String aft_cocktail_image,
             @RequestParam("aft_cocktail_explanation") String aft_cocktail_explanation,
             @RequestParam("aft_cocktail_glass") String aft_cocktail_glass,
             @RequestParam("aft_cocktail_base") String aft_cocktail_base,
@@ -131,20 +139,31 @@ public class TestCocktailController {
 
         String result = "fail";
         try {
+
+            String originalName = aft_cocktail_bitmap_file.getOriginalFilename();
+            String filePath = basePath + "/" + originalName;
+            String extension = originalName.substring(originalName.length() - 4, originalName.length());
+
+            int i = 1;
+            String fileName = filePath;
+
+            while (new File(filePath).exists()) {
+                filePath = fileName.substring(0, fileName.length() - 4).concat("(" + i + ")").concat(extension);
+                i++;
+            }
+
+            File dest = new File(filePath);
+            aft_cocktail_bitmap_file.transferTo(dest);
+
             Map<String, String> map = new HashMap<String, String>();
             map.put("cocktail_uuid", cocktail_uuid);
             map.put("aft_cocktail_name", aft_cocktail_name);
             map.put("aft_cocktail_writer", aft_cocktail_writer);
-            map.put("aft_cocktail_image", aft_cocktail_image);
+            map.put("aft_cocktail_image", dest.getName());
             map.put("aft_cocktail_explanation", aft_cocktail_explanation);
             map.put("aft_cocktail_glass", aft_cocktail_glass);
             map.put("aft_cocktail_base", aft_cocktail_base);
             map.put("aft_cocktail_source", aft_cocktail_source);
-
-            String originalName = aft_cocktail_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
-            File dest = new File(filePath);
-            aft_cocktail_bitmap_file.transferTo(dest);
 
             mMapper.updateCocktail(map);
             result = "success";

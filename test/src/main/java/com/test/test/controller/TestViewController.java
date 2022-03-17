@@ -79,11 +79,20 @@ public class TestViewController {
         for (MultipartFile file : files) {
             String originalName = file.getOriginalFilename();
             String filePath = basePath + "/" + originalName;
+            String extension = originalName.substring(originalName.length() - 4, originalName.length());
+
+            int i = 1;
+            String fileName = filePath;
+
+            while (new File(filePath).exists()) {
+                filePath = fileName.substring(0, fileName.length() - 4).concat("(" + i + ")").concat(extension);
+                i++;
+            }
+
             File dest = new File(filePath);
             file.transferTo(dest);
         }
 
-        System.out.println("multipart data0 : " + data0);
         System.out.println("multipart data1 : " + data1);
         System.out.println("multipart data2 : " + data2);
 

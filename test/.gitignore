@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### local configuration file (sdk path, etc) -> 이 부분이 API 키나 안드로이드 보안을 위해서 적용될 부분
+local.properties

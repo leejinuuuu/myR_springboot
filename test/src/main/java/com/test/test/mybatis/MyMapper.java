@@ -36,6 +36,9 @@ public interface MyMapper {
         // ingredient_name, ingredient_image
         void insertIngredient(Map<String, String> map);
 
+        // ingredient_name, ingredient_image, ingredient_uuid
+        void updateIngredient(Map<String, String> map);
+
         // ingredient_uuid
         IngredientDTO detailIngredient(Map<String, String> map);
 

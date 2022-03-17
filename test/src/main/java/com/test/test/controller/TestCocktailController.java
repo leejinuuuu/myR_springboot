@@ -1,5 +1,9 @@
 package com.test.test.controller;
 
+import javax.swing.filechooser.FileSystemView;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RestController
@@ -69,50 +75,83 @@ public class TestCocktailController {
         return result;
     }
 
+    // 사진을 저장할 때 프로젝트 내부에 저장하면, 프로젝트가 무거워지는 단점이 존재하기에
+    // 외부에 따로 파일을 만들어서 관리한다.
+    // C:\Users\jinw8\Desktop/single
+    String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+    String basePath = rootPath + "/" + "springboot_upload";
+
     @PostMapping("add")
     public String insertCocktail(
-            @RequestBody CocktailDTO cocktail) {
-
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("cocktail_name", cocktail.getCocktail_name());
-        map.put("cocktail_writer", cocktail.getCocktail_writer());
-        map.put("cocktail_image", cocktail.getCocktail_image());
-        map.put("cocktail_explanation", cocktail.getCocktail_explanation());
-        map.put("cocktail_glass", cocktail.getCocktail_glass());
-        map.put("cocktail_base", cocktail.getCocktail_base());
-        map.put("cocktail_source", cocktail.getCocktail_source());
+            @RequestParam("cocktail_bitmap_file") MultipartFile cocktail_bitmap_file,
+            @RequestParam("cocktail_name") String cocktail_name,
+            @RequestParam("cocktail_writer") String cocktail_writer,
+            @RequestParam("cocktail_image") String cocktail_image,
+            @RequestParam("cocktail_explanation") String cocktail_explanation,
+            @RequestParam("cocktail_glass") String cocktail_glass,
+            @RequestParam("cocktail_base") String cocktail_base,
+            @RequestParam("cocktail_source") String cocktail_source) {
 
         String result = "fail";
         try {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("cocktail_name", cocktail_name);
+            map.put("cocktail_writer", cocktail_writer);
+            map.put("cocktail_image", cocktail_image);
+            map.put("cocktail_explanation", cocktail_explanation);
+            map.put("cocktail_glass", cocktail_glass);
+            map.put("cocktail_base", cocktail_base);
+            map.put("cocktail_source", cocktail_source);
+
+            String originalName = cocktail_bitmap_file.getOriginalFilename();
+            String filePath = basePath + "/" + originalName;
+            File dest = new File(filePath);
+            cocktail_bitmap_file.transferTo(dest);
+
             mMapper.insertCocktail(map);
             result = "success";
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return result;
     }
 
     @PostMapping("md")
     public String updateCocktail(
-            @RequestBody CocktailDTO cocktail) {
-
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("cocktail_uuid", cocktail.getCocktail_uuid());
-        map.put("aft_cocktail_name", cocktail.getCocktail_name());
-        map.put("aft_cocktail_writer", cocktail.getCocktail_writer());
-        map.put("aft_cocktail_image", cocktail.getCocktail_image());
-        map.put("aft_cocktail_explanation", cocktail.getCocktail_explanation());
-        map.put("aft_cocktail_glass", cocktail.getCocktail_glass());
-        map.put("aft_cocktail_base", cocktail.getCocktail_base());
-        map.put("aft_cocktail_source", cocktail.getCocktail_source());
+            @RequestParam("cocktail_uuid") String cocktail_uuid,
+            @RequestParam("aft_cocktail_bitmap_file") MultipartFile aft_cocktail_bitmap_file,
+            @RequestParam("aft_cocktail_name") String aft_cocktail_name,
+            @RequestParam("aft_cocktail_writer") String aft_cocktail_writer,
+            @RequestParam("aft_cocktail_image") String aft_cocktail_image,
+            @RequestParam("aft_cocktail_explanation") String aft_cocktail_explanation,
+            @RequestParam("aft_cocktail_glass") String aft_cocktail_glass,
+            @RequestParam("aft_cocktail_base") String aft_cocktail_base,
+            @RequestParam("aft_cocktail_source") String aft_cocktail_source) {
 
         String result = "fail";
         try {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("cocktail_uuid", cocktail_uuid);
+            map.put("aft_cocktail_name", aft_cocktail_name);
+            map.put("aft_cocktail_writer", aft_cocktail_writer);
+            map.put("aft_cocktail_image", aft_cocktail_image);
+            map.put("aft_cocktail_explanation", aft_cocktail_explanation);
+            map.put("aft_cocktail_glass", aft_cocktail_glass);
+            map.put("aft_cocktail_base", aft_cocktail_base);
+            map.put("aft_cocktail_source", aft_cocktail_source);
+
+            String originalName = aft_cocktail_bitmap_file.getOriginalFilename();
+            String filePath = basePath + "/" + originalName;
+            File dest = new File(filePath);
+            aft_cocktail_bitmap_file.transferTo(dest);
+
             mMapper.updateCocktail(map);
             result = "success";
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return result;
     }
 

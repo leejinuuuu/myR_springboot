@@ -22,6 +22,13 @@
         insert into ingredient(ingredient_uuid, ingredient_name, ingredient_image)
             values(uuid(), #{ingredient_name}, #{ingredient_image});
     </insert>
+    <!-- 재료 수정 쿼리문 -->
+    <update id="updateIngredient" parameterType="hashMap">
+        update ingredient
+            set ingredient_name=#{aft_ingredient_name},
+                ingredient_image=#aft_ingredient_image}
+            where ingredient_uuid=#{ingredient_uuid};
+    </update>
     <!-- 재료 상세 쿼리문-->
     <select id="detailIngredient" parameterType="hashMap" resultType="com.test.test.tables.IngredientDTO">
         select * from ingredient where ingredient_uuid=#{ingredient_uuid};

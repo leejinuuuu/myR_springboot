@@ -57,8 +57,8 @@ public class TestViewController {
     // return "@{http://localhost:8000/}";
     // }
 
-    @PostMapping({ "/single", "/multi" })
-    public String uploadMulti(@RequestParam("files") List<MultipartFile> files) throws Exception {
+    @PostMapping({ "/uploads" })
+    public String uploadFile(@RequestParam("files") List<MultipartFile> files) throws Exception {
         // 파일 업로드(여러개) 처리 부분
         for (MultipartFile file : files) {
             String originalName = file.getOriginalFilename();
@@ -66,6 +66,27 @@ public class TestViewController {
             File dest = new File(filePath);
             file.transferTo(dest);
         }
+        return "content/index";
+    }
+
+    @PostMapping({ "/multi" })
+    public String uploadMulti(
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("data0") String data0,
+            @RequestParam("data1") String data1,
+            @RequestParam("data2") String data2) throws Exception {
+        // 파일 업로드(여러개) 처리 부분
+        for (MultipartFile file : files) {
+            String originalName = file.getOriginalFilename();
+            String filePath = basePath + "/" + originalName;
+            File dest = new File(filePath);
+            file.transferTo(dest);
+        }
+
+        System.out.println("multipart data0 : " + data0);
+        System.out.println("multipart data1 : " + data1);
+        System.out.println("multipart data2 : " + data2);
+
         return "content/index";
     }
 

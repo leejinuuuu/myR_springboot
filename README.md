@@ -8,8 +8,5 @@
 ------------
 #### API
 + cocktail
-    + /ct/ls 
-        ```
-        start, end
-        ```
+    + /ct/ls
     + /ct/std

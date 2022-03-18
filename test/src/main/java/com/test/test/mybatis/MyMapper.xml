@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.test.mybatis.MyMapper">
 
-    <select id="selectData"  parameterType="hashMap" resultType="com.test.test.data">
+    <select id="selectData"  parameterType="hashMap" resultType="com.test.test.data" fetchSize="100000">
     <!-- 쿼리문 -->
     select * from data;
     </select>
    
-    <insert id="insertData" parameterType="String">
+    <insert id="insertData" parameterType="hashMap">
     <!-- 쿼리문 -->    
         insert data(data0, data1, data2) values (#{data0}, #{data1}, #{data1});
     </insert>   

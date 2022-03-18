@@ -24,7 +24,7 @@ public interface MyMapper {
 
         int updateData(HashMap<Object, Object> vo) throws Exception;
 
-        int insertData(data data) throws Exception;
+        void insertData(Map<String, String> vo) throws Exception;
 
         List<data> selectData();
 

@@ -47,18 +47,18 @@ public class TestDataController {
         return mMapper.selectData();
     }
 
-    @RequestMapping(value = "/data", method = RequestMethod.POST)
-    public int insertData(
-            @RequestBody data data) {
+    // @RequestMapping(value = "/data", method = RequestMethod.POST)
+    // public int insertData(
+    // @RequestBody data data) {
 
-        int result = 0;
-        try {
-            result = mMapper.insertData(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // int result = 0;
+    // try {
+    // result = mMapper.insertData(data);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
 
-        return result;
-    }
+    // return result;
+    // }
 
 }

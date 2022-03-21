@@ -53,7 +53,7 @@ public class TestIngredientController {
     // 외부에 따로 파일을 만들어서 관리한다.
     // C:\Users\jinw8\Desktop/single
     String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-    String basePath = rootPath + "/" + "springboot_upload";
+    String basePath = rootPath + "/" + "upload_files_with_server/springboot/";
 
     @PostMapping("add")
     public String insertIngredient(

@@ -10,7 +10,7 @@ import lombok.Value;
 public class WebConfig implements WebMvcConfigurer {
 
     private String connectPath = "/images/**";
-    private String resourcePath = "file:///C:/Users/jinw8/Desktop/springboot_upload/";
+    private String resourcePath = "file:///C:/Users/jinw8/Desktop/upload_files_with_server/springboot/";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

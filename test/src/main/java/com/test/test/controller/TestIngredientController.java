@@ -153,7 +153,20 @@ public class TestIngredientController {
 
         String result = "fail";
         try {
-            mMapper.deleteIngredient(map);
+            File file = new File(basePath + mMapper.detailIngredient(map).ingredient_image);
+
+            if (file.exists()) {
+                if (file.delete()) {
+
+                    mMapper.deleteIngredient(map);
+                    System.out.println("파일삭제 성공");
+                } else {
+                    System.out.println("파일삭제 실패");
+                }
+            } else {
+                System.out.println("파일이 존재하지 않습니다.");
+            }
+
             result = "success";
         } catch (Exception e) {
             e.printStackTrace();

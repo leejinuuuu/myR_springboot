@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientDTO {
-    String ingredient_uuid;
-    String ingredient_name;
-    String ingredient_image;
+    public String ingredient_uuid;
+    public String ingredient_name;
+    public String ingredient_image;
 }

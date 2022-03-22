@@ -1,13 +1,7 @@
 package com.test.test.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.test.test.data;
 import com.test.test.mybatis.MyMapper;
 import com.test.test.tables.UserDTO;
 

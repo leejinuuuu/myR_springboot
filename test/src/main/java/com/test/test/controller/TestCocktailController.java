@@ -202,7 +202,20 @@ public class TestCocktailController {
 
         String result = "fail";
         try {
-            mMapper.deleteCocktail(map);
+            File file = new File(basePath + mMapper.detailCocktail(map).cocktail_image);
+
+            if (file.exists()) {
+                if (file.delete()) {
+
+                    mMapper.deleteCocktail(map);
+                    System.out.println("파일삭제 성공");
+                } else {
+                    System.out.println("파일삭제 실패");
+                }
+            } else {
+                System.out.println("파일이 존재하지 않습니다.");
+            }
+
             result = "success";
         } catch (Exception e) {
             e.printStackTrace();

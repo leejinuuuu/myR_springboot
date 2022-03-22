@@ -1,21 +1,14 @@
 package com.test.test.controller;
 
-import javax.swing.filechooser.FileSystemView;
-
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.test.test.data;
+import com.test.test.Global;
 import com.test.test.mybatis.MyMapper;
 import com.test.test.tables.CocktailDTO;
-import com.test.test.tables.CommentDTO;
-import com.test.test.tables.IngredientDTO;
 import com.test.test.tables.LimitDTO;
-import com.test.test.tables.SettingDTO;
 import com.test.test.tables.StandardLsDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("ct")
 public class TestCocktailController {
-
     @Autowired
     private MyMapper mMapper;
 
@@ -76,12 +68,6 @@ public class TestCocktailController {
         return result;
     }
 
-    // 사진을 저장할 때 프로젝트 내부에 저장하면, 프로젝트가 무거워지는 단점이 존재하기에
-    // 외부에 따로 파일을 만들어서 관리한다.
-    // C:\Users\jinw8\Desktop/single
-    String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-    String basePath = rootPath + "/" + "upload_files_with_server/springboot/";
-
     @PostMapping("add")
     public String insertCocktail(
             @RequestParam("cocktail_bitmap_file") MultipartFile cocktail_bitmap_file,
@@ -95,7 +81,7 @@ public class TestCocktailController {
         String result = "fail";
         try {
             String originalName = cocktail_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
+            String filePath = Global.basePath + "/" + originalName;
             String extension = originalName.substring(originalName.length() - 4, originalName.length());
 
             int i = 1;
@@ -140,9 +126,8 @@ public class TestCocktailController {
 
         String result = "fail";
         try {
-
             String originalName = aft_cocktail_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
+            String filePath = Global.basePath + "/" + originalName;
             String extension = originalName.substring(originalName.length() - 4, originalName.length());
 
             int i = 1;
@@ -202,19 +187,17 @@ public class TestCocktailController {
 
         String result = "fail";
         try {
-            File file = new File(basePath + mMapper.detailCocktail(map).cocktail_image);
+            File file = new File(Global.basePath + mMapper.detailCocktail(map).cocktail_image);
 
             if (file.exists()) {
                 if (file.delete()) {
 
                     mMapper.deleteCocktail(map);
                     System.out.println("파일삭제 성공");
-                } else {
+                } else
                     System.out.println("파일삭제 실패");
-                }
-            } else {
+            } else
                 System.out.println("파일이 존재하지 않습니다.");
-            }
 
             result = "success";
         } catch (Exception e) {

@@ -1,12 +1,12 @@
 package com.test.test.controller;
 
 import java.io.File;
-import javax.swing.filechooser.FileSystemView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.test.test.Global;
 import com.test.test.mybatis.MyMapper;
 import com.test.test.tables.IngredientDTO;
 import com.test.test.tables.LimitDTO;
@@ -49,12 +49,6 @@ public class TestIngredientController {
         return result;
     }
 
-    // 사진을 저장할 때 프로젝트 내부에 저장하면, 프로젝트가 무거워지는 단점이 존재하기에
-    // 외부에 따로 파일을 만들어서 관리한다.
-    // C:\Users\jinw8\Desktop/single
-    String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-    String basePath = rootPath + "/" + "upload_files_with_server/springboot/";
-
     @PostMapping("add")
     public String insertIngredient(
             @RequestParam("ingredient_bitmap_file") MultipartFile ingredient_bitmap_file,
@@ -64,7 +58,7 @@ public class TestIngredientController {
         try {
 
             String originalName = ingredient_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
+            String filePath = Global.basePath + "/" + originalName;
             String extension = originalName.substring(originalName.length() - 4, originalName.length());
 
             int i = 1;
@@ -100,7 +94,7 @@ public class TestIngredientController {
         String result = "fail";
         try {
             String originalName = aft_ingredient_bitmap_file.getOriginalFilename();
-            String filePath = basePath + "/" + originalName;
+            String filePath = Global.basePath + "/" + originalName;
             String extension = originalName.substring(originalName.length() - 4, originalName.length());
 
             int i = 1;
@@ -153,19 +147,17 @@ public class TestIngredientController {
 
         String result = "fail";
         try {
-            File file = new File(basePath + mMapper.detailIngredient(map).ingredient_image);
+            File file = new File(Global.basePath + mMapper.detailIngredient(map).ingredient_image);
 
             if (file.exists()) {
                 if (file.delete()) {
 
                     mMapper.deleteIngredient(map);
                     System.out.println("파일삭제 성공");
-                } else {
+                } else
                     System.out.println("파일삭제 실패");
-                }
-            } else {
+            } else
                 System.out.println("파일이 존재하지 않습니다.");
-            }
 
             result = "success";
         } catch (Exception e) {

@@ -85,7 +85,6 @@ public class TestUserController {
 
         UserDTO result = null;
         try {
-
             result = mMapper.searchUser(map);
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,7 +14,6 @@ import com.test.test.tables.SettingDTO;
 import com.test.test.tables.UserDTO;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository

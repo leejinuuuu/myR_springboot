@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Service
@@ -29,6 +27,23 @@ public class TestUserController {
 
     @Autowired
     private MyMapper mMapper;
+
+    @GetMapping("check")
+    public String checkUser(
+            @RequestBody UserDTO user) {
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("user_id", user.getUser_id());
+
+        String result = "fail";
+        try {
+            mMapper.checkUser(map);
+            result = "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     @GetMapping("login")
     public UserDTO loginUser(

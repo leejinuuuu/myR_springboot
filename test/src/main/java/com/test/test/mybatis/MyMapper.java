@@ -74,6 +74,9 @@ public interface MyMapper {
 
         // 사용자
 
+        // user_id
+        UserDTO checkUser(Map<String, String> map);
+
         // user_id, user_password
         UserDTO loginUser(Map<String, String> map);
 

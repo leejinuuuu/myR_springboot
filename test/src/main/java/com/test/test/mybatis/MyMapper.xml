@@ -81,6 +81,10 @@
         delete from cocktail where cocktail_uuid=#{cocktail_uuid};
     </delete>
 
+    <!-- 사용자 아이디 중복검사 쿼리문 -->
+    <select id="checkUser" parameterType="hashMap" resultType="String">>
+        select * from user where user_id=#{user_id};
+    </select>
     <!-- 사용자 로그인 쿼리문 -->
     <select id="loginUser" parameterType="hashMap" resultType="com.test.test.tables.UserDTO">>
         select * from user;

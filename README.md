@@ -1,7 +1,8 @@
-### 22.03.14
 #### 참고
 > https://github.com/leejinuuuu/myR
+
 ------------
+
 #### API
 + /ct
     + (GET) /ls
@@ -31,3 +32,14 @@
     + (DELETE) /download
     + (POST) /comment/add
     + (DELETE) /comment
+
+
+------------
+
+#### 정리
+패스워드 암호화 관련
+(출처: https://devlog-wjdrbs96.tistory.com/212)
+
+MyBatis 변수
+"#" : 기존의 SQL문에서 따옴표를 사용할 때 사용(문자)
+"$" : 기존의 SQL문에서 따옴표를 사용하지 않을 때 사용(숫자)

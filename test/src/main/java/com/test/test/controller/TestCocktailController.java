@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.test.test.Global;
-import com.test.test.mybatis.MyMapper;
+import com.test.test.service.CocktailService;
 import com.test.test.tables.CocktailDTO;
 import com.test.test.tables.LimitDTO;
 import com.test.test.tables.StandardLsDTO;
@@ -26,8 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("ct")
 public class TestCocktailController {
+
     @Autowired
-    private MyMapper mMapper;
+    private CocktailService cocktailService;
 
     // 칵테일
     @GetMapping("ls")
@@ -38,14 +39,7 @@ public class TestCocktailController {
         map.put("start", limit.getStart());
         map.put("end", limit.getEnd());
 
-        List<CocktailDTO> result = null;
-        try {
-            result = mMapper.listCocktail(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return cocktailService.listCocktail(map);
     }
 
     @GetMapping("std")
@@ -58,14 +52,7 @@ public class TestCocktailController {
         map.put("start", std.getStart());
         map.put("end", std.getEnd());
 
-        List<CocktailDTO> result = null;
-        try {
-            result = mMapper.listStdCocktail(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return cocktailService.listStdCocktail(map);
     }
 
     @PostMapping("add")
@@ -104,8 +91,7 @@ public class TestCocktailController {
             map.put("cocktail_base", cocktail_base);
             map.put("cocktail_source", cocktail_source);
 
-            mMapper.insertCocktail(map);
-            result = "success";
+            result = cocktailService.insertCocktail(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,8 +137,7 @@ public class TestCocktailController {
             map.put("aft_cocktail_base", aft_cocktail_base);
             map.put("aft_cocktail_source", aft_cocktail_source);
 
-            mMapper.updateCocktail(map);
-            result = "success";
+            result = cocktailService.updateCocktail(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,15 +152,7 @@ public class TestCocktailController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("cocktail_uuid", cocktail.getCocktail_uuid());
 
-        CocktailDTO result = null;
-        try {
-            result = mMapper.detailCocktail(map);
-            result.setSettings(mMapper.detailCocktail_setting(map));
-            result.setComments(mMapper.detailCocktail_comment(map));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return cocktailService.detailCocktail(map);
     }
 
     @DeleteMapping("")
@@ -185,24 +162,6 @@ public class TestCocktailController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("cocktail_uuid", cocktail.getCocktail_uuid());
 
-        String result = "fail";
-        try {
-            File file = new File(Global.basePath + mMapper.detailCocktail(map).cocktail_image);
-
-            if (file.exists()) {
-                if (file.delete()) {
-
-                    mMapper.deleteCocktail(map);
-                    System.out.println("파일삭제 성공");
-                } else
-                    System.out.println("파일삭제 실패");
-            } else
-                System.out.println("파일이 존재하지 않습니다.");
-
-            result = "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return cocktailService.deleteCocktail(map);
     }
 }

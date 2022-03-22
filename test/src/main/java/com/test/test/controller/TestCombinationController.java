@@ -3,7 +3,7 @@ package com.test.test.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.test.test.mybatis.MyMapper;
+import com.test.test.service.CombinationService;
 import com.test.test.tables.CommentDTO;
 import com.test.test.tables.DownloadDTO;
 import com.test.test.tables.SettingDTO;
@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("cb")
 public class TestCombinationController {
+
     @Autowired
-    private MyMapper mMapper;
+    private CombinationService combinationService;
 
     @PostMapping("setting/add")
     public String insertSetting(
@@ -34,14 +35,7 @@ public class TestCombinationController {
         map.put("vol", setting.getVol());
         map.put("tool", setting.getTool());
 
-        String result = "fail";
-        try {
-            mMapper.insertSetting(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return combinationService.insertSetting(map);
     }
 
     @DeleteMapping("setting")
@@ -51,14 +45,7 @@ public class TestCombinationController {
         map.put("cocktail_uuid", setting.getCocktail_uuid());
         map.put("ingredient_uuid", setting.getIngredient_uuid());
 
-        String result = "fail";
-        try {
-            mMapper.deleteSetting(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return combinationService.deleteSetting(map);
     }
 
     @PostMapping("download/add")
@@ -69,14 +56,7 @@ public class TestCombinationController {
         map.put("cocktail_name", download.getCocktail_name());
         map.put("user_id", download.getUser_id());
 
-        String result = "fail";
-        try {
-            mMapper.insertDownload(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return combinationService.insertDownload(map);
     }
 
     @DeleteMapping("download")
@@ -86,14 +66,7 @@ public class TestCombinationController {
         map.put("user_id", download.getUser_id());
         map.put("cocktail_uuid", download.getCocktail_uuid());
 
-        String result = "fail";
-        try {
-            mMapper.deleteDownload(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return combinationService.deleteDownload(map);
     }
 
     @PostMapping("comment/add")
@@ -105,15 +78,8 @@ public class TestCombinationController {
         map.put("user_id", comment.getUser_id());
         map.put("comment", comment.getComment());
         map.put("time", comment.getTime());
+        return combinationService.insertComment(map);
 
-        String result = "fail";
-        try {
-            mMapper.insertComment(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     @DeleteMapping("comment")
@@ -124,14 +90,7 @@ public class TestCombinationController {
         map.put("cocktail_uuid", comment.getCocktail_uuid());
         map.put("comment", comment.getComment());
         map.put("time", comment.getTime());
+        return combinationService.deleteComment(map);
 
-        String result = "fail";
-        try {
-            mMapper.deleteComment(map);
-            result = "succcess";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 }

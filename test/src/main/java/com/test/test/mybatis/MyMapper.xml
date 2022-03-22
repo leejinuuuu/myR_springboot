@@ -40,11 +40,11 @@
 
     <!-- 칵테일 목록 쿼리문-->
     <select id="listCocktail" parameterType="hashMap" resultType="com.test.test.tables.CocktailDTO">
-        select * from cocktail order by cocktail_name limit #{start}, #{end};
+        select * from cocktail order by cocktail_name limit ${start}, ${end};
     </select>
     <!-- 칵테일 기준 목록 쿼리문-->
     <select id="listStdCocktail" parameterType="hashMap" resultType="com.test.test.tables.CocktailDTO">
-        select * from cocktail where #{show_std}=#{show_std_content} order by cocktail_writer limit #{start}, #{end};
+        select * from cocktail where #{show_std}=#{show_std_content} order by cocktail_writer limit ${start}, ${end};
     </select>
     <!-- 칵테일 추가 쿼리문 -->
     <insert id="insertCocktail" parameterType="hashMap">

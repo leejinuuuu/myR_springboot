@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.test.test.Global;
-import com.test.test.mybatis.MyMapper;
+import com.test.test.service.IngredientService;
 import com.test.test.tables.IngredientDTO;
 import com.test.test.tables.LimitDTO;
 
@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class TestIngredientController {
 
     @Autowired
-    private MyMapper mMapper;
+    private IngredientService ingredientService;
 
     // 재료
     @GetMapping("ls")
@@ -39,14 +39,7 @@ public class TestIngredientController {
         map.put("start", limit.getStart());
         map.put("end", limit.getEnd());
 
-        List<IngredientDTO> result = null;
-        try {
-            result = mMapper.listIngredient(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return ingredientService.listIngredient(map);
     }
 
     @PostMapping("add")
@@ -76,8 +69,7 @@ public class TestIngredientController {
             map.put("ingredient_name", ingredient_name);
             map.put("ingredient_image", dest.getName());
 
-            mMapper.insertIngredient(map);
-            result = "success";
+            result = ingredientService.insertIngredient(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,8 +105,7 @@ public class TestIngredientController {
             map.put("aft_ingredient_image", dest.getName());
             map.put("ingredient_uuid", ingredient_uuid);
 
-            mMapper.insertIngredient(map);
-            result = "success";
+            result = ingredientService.updateIngredient(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,13 +120,7 @@ public class TestIngredientController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("ingredient_uuid", ingredient.getIngredient_uuid());
 
-        IngredientDTO result = null;
-        try {
-            result = mMapper.detailIngredient(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return ingredientService.detailIngredient(map);
     }
 
     @DeleteMapping("")
@@ -145,24 +130,6 @@ public class TestIngredientController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("ingredient_uuid", ingredient.getIngredient_uuid());
 
-        String result = "fail";
-        try {
-            File file = new File(Global.basePath + mMapper.detailIngredient(map).ingredient_image);
-
-            if (file.exists()) {
-                if (file.delete()) {
-
-                    mMapper.deleteIngredient(map);
-                    System.out.println("파일삭제 성공");
-                } else
-                    System.out.println("파일삭제 실패");
-            } else
-                System.out.println("파일이 존재하지 않습니다.");
-
-            result = "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return ingredientService.deleteIngredient(map);
     }
 }

@@ -10,14 +10,6 @@ create table data (
 	data2 varchar(50) null
 );
 
-insert data(data0, data1, data2) values("1","1","1");
-insert data(data0, data1, data2) values("2","2","2");
-insert data(data0, data1, data2) values("3","3","3");
-insert data(data0, data1, data2) values("4","4","4");
-
-select * from data;
-
-
 create table ingredient (
 	ingredient_uuid varchar(100) not null primary key,
 	ingredient_name varchar(100) not null,
@@ -42,6 +34,9 @@ create table user(
 	user_email varchar(100) not null unique key
 );
 
+/*
+combinations
+*/
 
 create table settingCocktailWithIngredient(
 	settingCocktailWithIngredient_uuid varchar(100) not null primary key,
@@ -56,7 +51,6 @@ create table settingCocktailWithIngredient(
 	foreign key(cocktail_uuid) references cocktail(cocktail_uuid) on delete cascade,
 	foreign key(ingredient_uuid) references ingredient(ingredient_uuid) on delete cascade	
 );
-
 
 create table commentCocktailWithUser(
 	commentCocktailWithUser_uuid varchar(100) not null primary key,
@@ -130,6 +124,11 @@ insert into
 	values (uuid(), 'b', 'b_name', '1', '1_name', '1', 'oz');
 
 
+select * from ingredient;
+select * from cocktail;
+select * from settingCocktailWithIngredient;
+
+
 
 /*
 사용자 추가 쿼리문
@@ -178,12 +177,107 @@ insert into
 	values (uuid(), 'a', 'a_name', 'user3_id', 'a_user3_comment0', 'time');
 
 
-
-select * from ingredient;
-select * from cocktail;
-select * from settingCocktailWithIngredient;
-
-
 select * from user;
 select * from downloadUserWithCocktail;
 select * from commentCocktailWithUser;
+
+/*
+삭제 쿼리문
+*/
+delete from user where user_id='user0_id';
+delete from ingredient where ingredient_name='1_name';
+delete from cocktail where cocktail_name='a_name';
+
+/*
+수정 쿼리문
+*/
+update user set user_nickname="userA_nickname" where user_id="user0_id" and user_password="user0_password";
+
+DELETE from ingredient WHERE ingredient_id="1_id";
+DELETE FROM COCKTAIL WHERE COCKTAIL_ID="a_id";
+
+select * from cocktail where cocktail_writer="a_writer";
+
+/*
+조합_칵테일_재료조합 목록
+*/
+select cocktail.cocktail_name, settingCocktailWithIngredient.ingredient_name, settingCocktailWithIngredient.vol, settingCocktailWithIngredient.tool 
+	from cocktail 
+		inner join settingCocktailWithIngredient 
+			on cocktail.cocktail_name = settingCocktailWithIngredient.cocktail_name and cocktail.cocktail_name = "a_name";
+
+select cocktail.*, settingCocktailWithIngredient.*, 
+commentCocktailWithUser.user_id, 
+commentCocktailWithUser.comment, 
+commentCocktailWithUser.time 
+	from cocktail 
+		inner join settingCocktailWithIngredient on 
+			cocktail.cocktail_name=settingCocktailWithIngredient.cocktail_name 
+			and cocktail.cocktail_name="a_name" 
+		inner join commentCocktailWithUser on 
+			cocktail.cocktail_name=commentCocktailWithUser.cocktail_name 
+			and cocktail.cocktail_name="a_name";
+
+
+/*
+FUNCTION
+*/
+
+DELIMITER //
+CREATE FUNCTION levenshtein( s1 VARCHAR(255), s2 VARCHAR(255) )
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+        DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;
+        DECLARE s1_char CHAR;
+        -- max strlen=255
+        DECLARE cv0, cv1 VARBINARY(256);
+
+        SET s1_len = CHAR_LENGTH(s1), s2_len = CHAR_LENGTH(s2), cv1 = 0x00, j = 1, i = 1, c = 0;
+
+        IF s1 = s2 THEN
+            RETURN 0;
+        ELSEIF s1_len = 0 THEN
+            RETURN s2_len;
+        ELSEIF s2_len = 0 THEN
+            RETURN s1_len;
+        ELSE
+            WHILE j <= s2_len DO
+                SET cv1 = CONCAT(cv1, UNHEX(HEX(j))), j = j + 1;
+            END WHILE;
+            WHILE i <= s1_len DO
+                SET s1_char = SUBSTRING(s1, i, 1), c = i, cv0 = UNHEX(HEX(i)), j = 1;
+                WHILE j <= s2_len DO
+                    SET c = c + 1;
+                    IF s1_char = SUBSTRING(s2, j, 1) THEN
+                        SET cost = 0; ELSE SET cost = 1;
+                    END IF;
+                    SET c_temp = CONV(HEX(SUBSTRING(cv1, j, 1)), 16, 10) + cost;
+                    IF c > c_temp THEN SET c = c_temp; END IF;
+                    SET c_temp = CONV(HEX(SUBSTRING(cv1, j+1, 1)), 16, 10) + 1;
+                    IF c > c_temp THEN
+                        SET c = c_temp;
+                    END IF;
+                    SET cv0 = CONCAT(cv0, UNHEX(HEX(c))), j = j + 1;
+                END WHILE;
+                SET cv1 = cv0, i = i + 1;
+            END WHILE;
+        END IF;
+        RETURN c;
+    END//
+DELIMITER ;
+
+/*
+TO FIND SIMILARITY FUNC
+*/
+select
+	ingredient_name,
+	levenshtein(ingredient_name, '2') as distance
+from ingredient
+where	
+	ingredient_name
+order by
+	distance
+	asc
+limit
+	3;

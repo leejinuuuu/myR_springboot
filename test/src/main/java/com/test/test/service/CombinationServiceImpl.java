@@ -5,7 +5,9 @@ import java.util.Map;
 import com.test.test.mybatis.MyMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CombinationServiceImpl implements CombinationService {
 
     @Autowired

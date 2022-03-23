@@ -9,7 +9,9 @@ import com.test.test.mybatis.MyMapper;
 import com.test.test.tables.IngredientDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class IngredientServiceImpl implements IngredientService {
 
     @Autowired

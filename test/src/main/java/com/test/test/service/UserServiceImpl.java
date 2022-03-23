@@ -6,11 +6,17 @@ import com.test.test.mybatis.MyMapper;
 import com.test.test.tables.UserDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private MyMapper mMapper;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public String checkUser(Map<String, String> map) {
@@ -39,6 +45,9 @@ public class UserServiceImpl implements UserService {
     public String insertUser(Map<String, String> map) {
         String result = "fail";
         try {
+            String encodePassword = passwordEncoder.encode(map.get("user_password"));
+            map.put("user_password", encodePassword);
+
             mMapper.insertUser(map);
             result = "success";
         } catch (Exception e) {

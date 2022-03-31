@@ -14,9 +14,11 @@ public class TestJpaIngredientService {
     private TestIngredientRepository ingredientRepository;
 
     public void srXX() throws Exception {
+
+        System.out.println(ingredientRepository.countNum());
+
         List<TestIngredientEntity> list = ingredientRepository.findAll();
         for (int i = 0; i < list.size(); i++)
             System.out.println(list.get(i).getIngredient_name());
     }
-
 }

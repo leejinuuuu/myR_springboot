@@ -4,6 +4,7 @@ import com.test.test.entity.TestIngredientEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TestIngredientRepository extends JpaRepository<TestIngredientEntity, String> {
+public interface TestIngredientRepository
+        extends JpaRepository<TestIngredientEntity, String>, TestIngredientRepositoryCustom {
 
 }

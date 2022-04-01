@@ -23,7 +23,7 @@ public class TestIngredientRepositoryImpl implements TestIngredientRepositoryCus
     public TestIngredientEntity searchByName(String name) {
         Tuple tuple = queryFactory
                 .select(
-
+                // ingredient
                 )
                 .from()
                 .where()

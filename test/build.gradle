@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        queryDslVersion = "4.4.0"
+        queryDslVersion = "5.0.0"
     }
 }
 
@@ -18,9 +18,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-   
-   querydsl.extendsFrom compileClasspath
-
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -47,8 +44,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+	// querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
     // QueryDSL
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	// compileClasspath('com.querydsl:querydsl-jpa')
+    // implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor(
             "javax.persistence:javax.persistence-api",
             "javax.annotation:javax.annotation-api",
@@ -56,6 +60,14 @@ dependencies {
 
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+
+	// //querydsl-jpa
+	// compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.3.1'
+	// // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
+	// compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.3.1'
+	// // https://mvnrepository.com/artifact/com.querydsl/querydsl-core
+	// compile group: 'com.querydsl', name: 'querydsl-core', version: '4.3.1'
 }
 
 tasks.named('test') {
@@ -65,19 +77,33 @@ tasks.named('test') {
 
 //querydsl 추가 시작
 
-def querydslDir = "src/main/generated"
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
- jpa = true
- querydslSourcesDir = querydslDir
+    library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
 }
 
 sourceSets {
- main.java.srcDir querydslDir
+ 	 main {
+        java {
+            srcDirs querydslDir
+        }
+    }
 }
-
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
 compileQuerydsl {
- options.annotationProcessorPath = configurations.querydsl
+ 	options.annotationProcessorPath = configurations.querydsl
 }
 
+
+// tasks.withType(JavaCompile) { 
+// 	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir) 
+// }
 //querydsl 추가 끝

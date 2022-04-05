@@ -2,7 +2,7 @@
 > https://github.com/leejinuuuu/myR
 
 #### TODO
-> page error 처리
+> ~~page error 처리~~
 
 ------------
 

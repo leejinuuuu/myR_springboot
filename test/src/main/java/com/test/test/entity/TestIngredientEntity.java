@@ -23,7 +23,7 @@ public class TestIngredientEntity {
     private String ingredient_image;
 
     @Builder
-    TestIngredientEntity(String ingredient_name, String ingredient_image) {
+    public TestIngredientEntity(String ingredient_name, String ingredient_image) {
         this.ingredient_name = ingredient_name;
         this.ingredient_image = ingredient_image;
     }

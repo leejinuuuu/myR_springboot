@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.test.test.entity.QTestIngredientEntity.testIngredientEntity;;
+
 @Repository
 @RequiredArgsConstructor
 public class TestIngredientRepositoryImpl implements TestIngredientRepositoryCustom {
@@ -23,14 +25,15 @@ public class TestIngredientRepositoryImpl implements TestIngredientRepositoryCus
     public TestIngredientEntity searchByName(String name) {
         Tuple tuple = queryFactory
                 .select(
-                // ingredient
-                )
-                .from()
-                .where()
+                        testIngredientEntity.ingredient_name,
+                        testIngredientEntity.ingredient_image)
+                .from(testIngredientEntity)
+                .where(testIngredientEntity.ingredient_name.eq(name))
                 .fetchFirst();
-        // return new TestIngredientEntity(tuple.get(), tuple.get());
+        return new TestIngredientEntity(tuple.get(testIngredientEntity.ingredient_name),
+                tuple.get(testIngredientEntity.ingredient_image));
 
-        return null;
+        // return null;
     }
 
     @Override

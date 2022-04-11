@@ -29,10 +29,11 @@ public class TestDataRepositoryImpl implements TestDataRepositoryCustom {
 
         // String sql = "insert into data(uuid, title, content) values
         // ('data0_uuid','data0_title','data0_content')";
-        String sql = "select * from data";
-        Query query = factory.createEntityManager().createNativeQuery(sql, data.class);
+        // String sql = "select * from data";
+        // Query query = factory.createEntityManager().createNativeQuery(sql,
+        // data.class);
 
-        System.out.println("query.getFirstResult() - " + query.getFirstResult());
+        // System.out.println("query.getFirstResult() - " + query.getFirstResult());
 
         List<Tuple> list = queryFactory
                 .select(
@@ -42,10 +43,12 @@ public class TestDataRepositoryImpl implements TestDataRepositoryCustom {
                 .fetch();
 
         ArrayList<TestDataEntity> value = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++)
+        for (int i = 0; i < list.size(); i++) {
             value.add(
                     new TestDataEntity(list.get(i).get(testDataEntity.uuid), list.get(i).get(testDataEntity.title),
                             list.get(i).get(testDataEntity.content)));
+        }
+
         return value;
     }
 

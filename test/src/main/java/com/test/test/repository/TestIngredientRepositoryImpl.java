@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
-import static com.test.test.entity.QTestIngredientEntity.testIngredientEntity;;
+import static com.test.test.entity.QTestIngredientEntity.testIngredientEntity;
 
 @Repository
 @RequiredArgsConstructor

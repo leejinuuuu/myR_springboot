@@ -48,3 +48,8 @@
 > MyBatis 변수  
 "#" : 기존의 SQL문에서 따옴표를 사용할 때 사용(문자)  
 "$" : 기존의 SQL문에서 따옴표를 사용하지 않을 때 사용(숫자)  
+
+> DTO, ENTITY Class 차이
+DTO : Request, Response을 위해 변경이 용이한 클래스
+ENTITY : DB 테이블와 매칭될 클래스
+(출처 : https://gmlwjd9405.github.io/2018/12/25/difference-dao-dto-entity.html)

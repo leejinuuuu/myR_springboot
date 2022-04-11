@@ -16,9 +16,12 @@ public class TestJpaDataService {
     public void findDataAll() throws Exception {
         ArrayList<TestDataEntity> list = testDataRepository.findAll();
 
+        testDataRepository.saveAndFlush(new TestDataEntity("data1_uuid", "data1_title", "data1_content"));
+
         for (int i = 0; i < list.size(); i++)
             System.out.println("find all - i(" + i + ") : " + list.get(i).getTitle());
 
-        testDataRepository.saveAndFlush(new TestDataEntity("data1_uuid", "data1_title", "data1_content"));
+        // testDataRepository.delete(new TestDataEntity("data1_uuid", "data1_title",
+        // "data1_content"));
     }
 }

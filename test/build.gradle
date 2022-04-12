@@ -15,6 +15,11 @@ plugins {
 	id 'war'
 }
 
+war {
+	baseName = 'gradle'
+	version = '0.0.1'
+}
+
 group = 'com.test'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'

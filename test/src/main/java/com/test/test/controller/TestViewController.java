@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class TestViewController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = { "/" }, method = RequestMethod.GET)
     public String index(Model model) {
         model.addAttribute("title", "model attribute value");
         return "content/index";

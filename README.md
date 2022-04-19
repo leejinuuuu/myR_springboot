@@ -53,3 +53,6 @@
 DTO : Request, Response을 위해 변경이 용이한 클래스
 ENTITY : DB 테이블와 매칭될 클래스
 (출처 : https://gmlwjd9405.github.io/2018/12/25/difference-dao-dto-entity.html)
+
+> 머리정리
+주고받는 데이터는 최대한 id값만 포함한 배열들로 이뤄지게
